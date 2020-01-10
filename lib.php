@@ -28,19 +28,6 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once(__DIR__ . '/../../config.php');
 
-try {
-    require_login();
-} catch (coding_exception $e) {
-    echo 'Exception [coding_exception] (blocks/point_view/lib.php -> require_login()) : ',
-    $e->getMessage(), "\n";
-} catch (require_login_exception $e) {
-    echo 'Exception [require_login_exception] (blocks/point_view/lib.php -> require_login()) : ',
-    $e->getMessage(), "\n";
-} catch (moodle_exception $e) {
-    echo 'Exception [moodle_exception] (blocks/point_view/lib.php -> require_login()) : ',
-    $e->getMessage(), "\n";
-}
-
 /** Administration configuration to enable Reactions */
 const DEFAULT_POINT_VIEW_ENABLE_REACTIONS = 1;
 
@@ -58,6 +45,7 @@ const DEFAULT_POINT_VIEW_ENABLE_CUSTOM_PIX = 0;
  */
 function block_point_view_get_course_data ($courseid, $contextid = null) {
     global $PAGE;
+    require_login();
 
     $PAGE->set_context($contextid);
 
@@ -138,6 +126,7 @@ function block_point_view_compare_activities($a, $b) {
  * @throws coding_exception
  */
 function block_point_view_manage_types($mform, $types) {
+    require_login();
 
     foreach ($types as $type) {
 
@@ -200,6 +189,7 @@ function block_point_view_manage_types($mform, $types) {
  * @return void|false
  */
 function block_point_view_pluginfile($course, $bi, $context, $filearea, $args, $forcedownload, array $options = array()) {
+    require_login();
 
     $fs = get_file_storage();
 
@@ -241,6 +231,7 @@ function block_point_view_pluginfile($course, $bi, $context, $filearea, $args, $
  * @return string
  */
 function block_point_view_pix_url($context, $filearea, $react) {
+    require_login();
 
     return strval(moodle_url::make_pluginfile_url(
         $context,
@@ -263,7 +254,6 @@ function block_point_view_pix_url($context, $filearea, $react) {
  * @return string
  */
 function tostring($output, $data, $users, $course) {
-
     $string = '';
 
     foreach ($data as $item) {
